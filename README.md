@@ -2,9 +2,9 @@
 Computa o saldo de criptos a partir dos relatórios de operações nas corretoras.
 
 ## Dependências
-numpy
-pandas
-extensão xlrd do pandas
+* numpy
+* pandas
+* xlrd: extensão do pandas para ler arquivos do Excel
 
 # Módulos
 
