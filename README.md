@@ -4,9 +4,11 @@ Computa o saldo de criptos a partir dos relatórios de operações nas corretora
 
 ## [Carteira.py](Carteira.py)
 Define a classe **Carteira**, que mantém a quantidade de cada cripto e o valor de compra, em R$.
+
+O main faz um teste da classe.
 <br><br>
 
-## CarregaTransacoes.py
+## [CarregaTransacoes.py](CarregaTransacoes.py)
 Lê transações no formato padrão e atualiza uma Carteira.<br>
 
 Trabalha com o conceito de "permuta", isto é, só considera venda, com lucro passível de imposto, quando uma cripto é trocada por BRL.
@@ -16,11 +18,11 @@ Gera relatório informando a necessidade de declarar as operações (no caso de 
 <br><br>
 
 
-## Testa_CarregaTransacoes.py
+## [Testa_CarregaTransacoes.py](Testa_CarregaTransacoes.py)
 Casos de teste para CarregaTransacoes.py
 <br><br>
 
-## AcumulaOperacoesBinance.py
+## [AcumulaOperacoesBinance.py](AcumulaOperacoesBinance.py)
 A classe **LeOperacoesBinance** lê os formatos da Binance, como Depositos, Trades e Transacoes. <br>
 
 Aviso: o relatório mais completo da Binance é o Transactions. Como esse relatório foi adicionado recentemente, uso outros relatórios para dados mais antigos. Por isso ainda é necessário trabalhar na detecção de registros duplicados e completar a função LeOperacoesBinance::leArquivoTransactions().
@@ -30,7 +32,7 @@ O main traz um exemplo de uso, usando a classe **LeOperacoesBinance** e salvando
 Na sequencia, lê os registros do formato padrão usando o mõdulo **CarregaTransacoes.py**  e acumula os valores na carteira usando **Carteira.py**
 <br><br>
 
-## AcumulaOperacoesBitcoinTrade.py
+## [AcumulaOperacoesBitcoinTrade.py](AcumulaOperacoesBitcoinTrade.py)
 A classe **LeOperacoesBitcointrade** lê o extrato da Bitcointrade. <br>
 
 O main traz um exemplo de uso, usando a classe **LeOperacoesBitcointrade** e salvando os registros em um arquivo com formato padrão.
