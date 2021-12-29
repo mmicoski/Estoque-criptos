@@ -15,3 +15,6 @@ Define a classe **Carteira**, que mantém a quantidade de cada cripto e o valor 
 
 ## CarregaTransacoes.py
 Lê transações no formato padrão e atualiza uma Carteira.
+
+## Testa_CarregaTransacoes.py
+Casos de teste para CarregaTransacoes.py
