@@ -18,3 +18,11 @@ Lê transações no formato padrão e atualiza uma Carteira.
 
 ## Testa_CarregaTransacoes.py
 Casos de teste para CarregaTransacoes.py
+
+
+## AcumulaOperacoesBitcoinTrade.py
+A classe **LeOperacoesBitcointrade** lê o extrato da Bitcointrade. <br>
+
+O main traz um exemplo de uso, usando a classe **LeOperacoesBitcointrade** e salvando os registros em um arquivo com formato padrão.
+
+Na sequencia, lê os registros do formato padrão usando o mõdulo **CarregaTransacoes.py**  e acumula os valores na carteira usando **Carteira.py**
