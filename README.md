@@ -9,7 +9,7 @@ Define a classe **Carteira**, que mantém a quantidade de cada cripto e o valor 
 ## CarregaTransacoes.py
 Lê transações no formato padrão e atualiza uma Carteira.<br>
 
-Trabalha com o conceito de "permuta", isto é, só considera venda, com lucro, quando uma cripto é trocada por BRL.
+Trabalha com o conceito de "permuta", isto é, só considera venda, com lucro passível de imposto, quando uma cripto é trocada por BRL.
 
 Acumula o total de operações, o total de vendas e o lucro para cada mês.<br>
 Gera relatório informando a necessidade de declarar as operações (no caso de exchange estrangeira) e de pagar imposto.
