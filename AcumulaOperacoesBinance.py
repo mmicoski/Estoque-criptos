@@ -15,7 +15,7 @@ import re
 import copy
 import datetime
 import time
-
+import sys
 
 class LeOperacoesBinance:
     def __init__(self):
@@ -303,93 +303,115 @@ class LeOperacoesBinance:
         
         return sop
         
+    # -----------------------------------------------
+    def carrega_registros(self, nomein):
+        self.operacoes = []
+        fin = open(nomein, 'rt')
+        titulos = fin.readline().rstrip().split('\t')
+        
+        dads = [a.rstrip().split('\t') for a in fin.readlines()]
 
+        for dad in dads:
+            op = {t:v for t,v in zip(titulos, dad)}
+            op['idop'] = np.float64(op['idop'])
+            op['UTC_Time'] = pd.Timestamp(op['UTC_Time'])
+            op['Change'] = np.float64(op['Change'])
+            self.operacoes.append(op)
+            
+            
+        sop =  sorted(self.operacoes, key = lambda x:x['idop'])
+        
+        return sop            
+        
 
 # ==================================
 if __name__ == '__main__':  
 
-
-
     leb = LeOperacoesBinance()
 
-
-    # lê arquivos
-    dirin = '../Binance/historico'
+    if 0:
+        #####################################
+        # 1. le arquivos entregues pela Binance
     
-    arqs = [a for a in os.listdir(dirin) if 'xlsx' in a and 'lock' not in a and 'Transaction' not in a ]
     
-    for a in arqs:
-        ret = leb.leArquivoDepositosTrades(dirin+'/'+a)
-        print(a, ret)
-        if ret[0] != 'OK':
-            print("FALHA", ret)
-            break
+        # lê arquivos
+        dirin = '../Binance/historico'
+        
+        arqs = [a for a in os.listdir(dirin) if 'xlsx' in a and 'lock' not in a and 'Transaction' not in a ]
 
         
-    arqs = [a for a in os.listdir(dirin) if 'xlsx' in a and 'lock' not in a and 'Transaction' in a]
+        for a in arqs:
+            ret = leb.leArquivoDepositosTrades(dirin+'/'+a)
+            print(a, ret)
+            if ret[0] != 'OK':
+                print("FALHA", ret)
+                break
     
-    for a in arqs:
-        ret = leb.leArquivoTransactions(dirin+'/'+a)
-        print(a, ret)
-        if ret[0] != 'OK':
-            print("FALHA", ret)
-            break
-
-
-
-    sop = leb.salva_registros('../regs_binance.tsv')
-
-    # monta carteira
+            
+        arqs = [a for a in os.listdir(dirin) if 'xlsx' in a and 'lock' not in a and 'Transaction' in a]
+        
+            
+        for a in arqs:
+            ret = leb.leArquivoTransactions(dirin+'/'+a)
+            print(a, ret)
+            if ret[0] != 'OK':
+                print("FALHA", ret)
+                break
+    
+    
+        #########################
+        # 2. Salva registros ordenados
+        sop = leb.salva_registros('../regs_binance.tsv')
+        
+    else:
+        ## carrega arquivo pronto
+        sop = leb.carrega_registros('../regs_binance.tsv')
+        
+    
+    ###########################
+    # 3. monta carteira
     import Carteira
     import CarregaTransacoes
     
-    cart_bin = Carteira.Carteira('Binance',{})
+    bkpstd = None
+    if 0:
+        bkpstd = [sys.stdout, sys.stderr]
+        sys.stdout = open("binance_out.txt","wt")
+        sys.stderr = open("binance_err.txt","wt")
 
-    CarregaTransacoes.carregaTransacoesQuantidade(cart_bin, sop)
-    cart_bin.relmoedas2()
+    
+    if 0:
+    
+        cart_bin = Carteira.Carteira('Binance',{})
+    
+        # carrega apenas quantidades, o que é mais fácil de verificar
+        CarregaTransacoes.carregaTransacoesQuantidade(cart_bin, sop)
+        cart_bin.relmoedas2()
+        
     
 
+    ###############
+    # 3. analisa valores em R$
+    # analisa registros da mesma data-hora
     if 1:
-
-        def  carrega_grupo(carteira, grupoop):
-            qtmoeda = float(s['Change'])
-            if qtmoeda >= 0:
-                ret = carteira.deposita(s['Coin'], qtmoeda, 0)
         
-            else:
-                ret = carteira.retira(s['Coin'], abs(qtmoeda))
-                
-            
-            fop.write(str(s)+'\n')
-            for m in sorted(carteira.moedas):
-                fop.write("  %s: %s\n"%(m, carteira.moedas[m]))
-            
-            if ret[0] != "OK":
-                print(s, ret)
-
-
         cart_binval = Carteira.Carteira('BinanceRS',{})
+        cart_binval.log = False
 
         registros = sop
-        carteira = cart_binval
-
-        grupoop = []
-        idant = None
+        CarregaTransacoes.carregaTransacoes(cart_binval, sop)
+        cart_binval.relmoedas2()
         
-        fop = open('../op_estado_total_%s.txt'%cart_binval.local, 'wt')
-        for s in registros:
-            idop = s['idop']
-            if idop != idant:
-                if idant is not None:
-                    carrega_grupo(grupoop)
-                
-                
-                idant = idop
-                grupoop = []
-            
-            grupoop.append(s)
-                
-            
-            
-    
-        fop.close()    
+        CarregaTransacoes.relatorioPorMes()
+
+        
+
+
+    if bkpstd is not None:
+        flog = sys.stdout
+        sys.stdout = bkpstd[0]
+        flog.close()
+
+        flog = sys.stderr
+        sys.stderr = bkpstd[1]
+        flog.close()

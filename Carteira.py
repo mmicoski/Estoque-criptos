@@ -67,7 +67,8 @@ class Carteira:
    
         if nome in self.moedas: 
             if quantidade > self.moedas[nome]['qt']:
-                ret = ["NOK", "retirada saldo insuficiente", 0.0, self.moedas[nome]['qt']]
+                falta = quantidade - self.moedas[nome]['qt']
+                ret = ["NOK", "retirada %f saldo insuficiente %f falta %f"%(quantidade,self.moedas[nome]['qt'], falta), 0.0, self.moedas[nome]['qt']]
                 if self.log: print("retira() AVISO: %s"%ret[2], [nome, quantidade])
         else:
             ret = ["NOK", "retirada sem moeda", 0.0]
