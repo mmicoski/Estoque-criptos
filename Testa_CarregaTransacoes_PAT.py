@@ -7,11 +7,18 @@ Created on Tue Dec 28 12:08:49 2021
 
 # testes
 import Carteira
-import CarregaTransacoes
+import CarregaTransacoes_PAT
 import pandas as pd 
 
 
-cartTeste = None
+precoCriptoUsd = {
+                'BTC':{'2019-12-23':1000, '2019-12-24':1100, '2019-12-25':1200, '2019-12-26':1300,  },
+                'ETH':{'2019-12-23':100, '2019-12-24':110, '2019-12-25':120, '2019-12-26':130,  },
+        }
+
+precoDolarBrlCompra = {'2019-12-23':2.00, '2019-12-24':2.1, '2019-12-25':2.2, '2019-12-26':2.3,  }
+precoDolarBrlVenda = {'2019-12-23':2.00, '2019-12-24':2.1, '2019-12-25':2.2, '2019-12-26':2.3, }
+
 
 regs = [
         
@@ -22,7 +29,19 @@ regs = [
      'Operation_name': 'DEPOSIT', 
      'Remark': '', 
      'Operation_type': 'deposit', 
-     'Coin': 'BRL', 'Change': 1000.0},
+     'Coin': 'BRL', 'Change': 1000.0,
+     
+     'res_sem_cotacao': {
+             'carteira': {'BRL': {'qt': 1000.0, 'totalR$': 1000.0}},
+             'mesames': {'201912': {'opRS': 1000.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+             },
+
+     'res_com_cotacao': {
+             'carteira': {'BRL': {'qt': 1000.0, 'totalR$': 1000.0}},
+             'mesames': {'201912': {'opRS': 1000.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+             }
+     
+     },
 
     # compra BTC
     {'origem': 'a1', 
@@ -39,8 +58,27 @@ regs = [
      'Operation_name': 'BUY', 
      'Remark': '', 
      'Operation_type': 'buy', 
-     'Coin': 'BRL', 'Change': -900.0},
+     'Coin': 'BRL', 'Change': -900.0,
+     
+     'res_sem_cotacao': {
+             'carteira': {
+                     'BRL': {'qt': 100.0, 'totalR$': 100.0},
+                     'BTC': {'qt': 0.1, 'totalR$': 900.0}
+                     },
+             'mesames': {'201912': {'opRS': 1900.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+             },
+
+     'res_com_cotacao': {
+             'carteira': {'BRL': {'qt': 100.0, 'totalR$': 100.0},
+                          'BTC': {'qt': 0.1, 'totalR$': 900.0}
+                          },
+             'mesames': {'201912': {'opRS': 1900.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+             },
+     
+     },
     
+     
+     
     
     # troca BTC por ETH
     {'origem': 'a1', 
@@ -65,8 +103,27 @@ regs = [
      'Operation_name': 'BUY', 
      'Remark': '', 
      'Operation_type': 'fee', 
-     'Coin': 'ETH', 'Change': -0.1},     
+     'Coin': 'ETH', 'Change': -0.1,     
     
+     
+     'res_sem_cotacao': {
+             'carteira': {'BRL': {'qt': 100.0, 'totalR$': 100.0},
+                          'BTC': {'qt': 0.05, 'totalR$': 450.0},
+                          'ETH': {'qt': 1.0, 'totalR$': 450.0}
+                          },
+             
+             'mesames': {'201912': {'opRS': 2350.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+             },
+
+     'res_com_cotacao': {
+             'carteira': {
+                     'BRL': {'qt': 100.0, 'totalR$': 100.0},
+                     'BTC': {'qt': 0.05, 'totalR$': 450.0},
+                     'ETH': {'qt': 1.0, 'totalR$': 450.0}                     
+                 },
+             'mesames': {'201912': {'opRS': 2350.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+             },     
+    },
     
     # vende ETH com lucro
     {'origem': 'a1', 
@@ -83,7 +140,27 @@ regs = [
      'Operation_name': 'BUY', 
      'Remark': '', 
      'Operation_type': 'buy', 
-     'Coin': 'ETH', 'Change': -0.5},     
+     'Coin': 'ETH', 'Change': -0.5,     
+    
+     
+     'res_sem_cotacao': {
+             'carteira': {'BRL': {'qt': 1100.0, 'totalR$': 1100.0},
+                          'BTC': {'qt': 0.05, 'totalR$': 450.0},
+                          'ETH': {'qt': 0.5, 'totalR$': 225.0}
+                          },
+             
+             'mesames': {'201912': {'opRS': 3350.0, 'vendaRS': 1000.0, 'lucroRS': 775.0}}
+             },
+
+     'res_com_cotacao': {
+             'carteira': {
+                     'BRL': {'qt': 1100.0, 'totalR$': 1100.0},
+                     'BTC': {'qt': 0.05, 'totalR$': 450.0},
+                     'ETH': {'qt': 0.5, 'totalR$': 225.0}                     
+                 },
+             'mesames': {'201912': {'opRS': 3350.0, 'vendaRS': 1000.0, 'lucroRS': 775.0}}
+             },     
+    },     
      
     # vende BTC com lucro
     {'origem': 'a1', 
@@ -169,115 +246,26 @@ regs = [
     ]
 
 
-testes = [
-        # teste 0
-        [0,1,
-         {'BRL': {'qt': 1000.0, 'totalR$': 1000.0}},
-         {'201912': {'opRS': 1000.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
-         ],
-        
-        
-        # teste 1
-        [0,3,
-         {'BRL': {'qt': 100.0, 'totalR$': 100.0},
-             'BTC': {'qt': 0.1, 'totalR$': 900.0}
-             },
-         {'201912': {'opRS': 1900.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
-         ],
-        
-        # teste 2
-        [0,6,
-         {'BRL': {'qt': 100.0, 'totalR$': 100.0},
-             'BTC': {'qt': 0.05, 'totalR$': 450.0},
-             'ETH': {'qt': 1.0, 'totalR$': 450.0}
-             },
-         {'201912': {'opRS': 2350.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
-         ],        
-        
-        # teste 3
-        [0,8,
-         {'BRL': {'qt': 1100.0, 'totalR$': 1100.0},
-             'BTC': {'qt': 0.05, 'totalR$': 450.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 3350.0, 'vendaRS': 1000.0, 'lucroRS': 775.0}}
-         ],   
 
 
-        # teste 4
-         [0,11,
-         {'BRL': {'qt': 1500.0, 'totalR$': 1500.0},
-             'BTC': {'qt': 0.04, 'totalR$': 360.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 2665.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-
-
-        # teste 5
-         [0,12,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.04, 'totalR$': 360.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 3565.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-        
-        # teste 6
-         [0,13,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 3700.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-         
-        # teste 7
-         [0,14,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.51, 'totalR$': 245.0}
-             },
-         {'201912': {'opRS': 3720.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-
-        # teste 8
-         [0,15,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.5101, 'totalR$': 245.0}
-             },
-         {'201912': {'opRS': 3720.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-
-        # teste 9
-         [0,17,
-         {'BRL': {'qt': 700.0, 'totalR$': 700.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.2101, 'totalR$': 100.91060576357577}
-             },
-         {'201912': {'opRS': 3864.089394236424, 'vendaRS': 1500.0, 'lucroRS': 1085.0}}
-         ],  
-
-
-        ]
-
-def teste(n, regs, cartf, mmf):
-    global cartTeste
+def teste_sem_cotacao(n, regs):
     
     ok = True
     
-    cartTeste = Carteira.Carteira('TesteRS',{})
-    CarregaTransacoes.mesames = {} 
+    cctpat = CarregaTransacoes_PAT.CarregaTransacoes_PAT('Teste')
+    cctpat.hc =  None
+    
+    cartf = regs[-1]['res_sem_cotacao']['carteira']
+    mmf   = regs[-1]['res_sem_cotacao']['mesames']
            
-    rett, mesames = CarregaTransacoes.carregaTransacoes(cartTeste, regs)
-    if  cartTeste.moedas != cartf:
+    rett, mesames = cctpat.carregaTransacoes(regs)
+    if  cctpat.carteira.moedas != cartf:
         ok = False
         print("  ERRO %d.0"%n)
         print("esperado", cartf)
         print("obtido  ", cartTeste.moedas)
         
-    if CarregaTransacoes.mesames != mmf:
+    if cctpat.mesames != mmf:
         ok = False
         print("  ERRO %d.1"%n)
         print("esperado", mmf)
@@ -295,8 +283,10 @@ def teste(n, regs, cartf, mmf):
 if __name__ == "__main__":
     ok = True
     
-    for i,t in enumerate(testes):
-        ok = ok and teste(i, regs[t[0]:t[1]], t[2], t[3])
+    for i in range(len(regs)):
+        if 'res_sem_cotacao' in regs[i]:
+            ok = ok and teste_sem_cotacao(i, regs[:i+1])
+            
     
     
     print("Final:", "OK" if ok else "NOK")
