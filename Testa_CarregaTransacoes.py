@@ -3,6 +3,10 @@
 Created on Tue Dec 28 12:08:49 2021
 
 @author: mmico
+
+Aplica sequencia de operações e compara resultados com os calculados na planilha testeCarregaTransacoes.ods.
+Usa a aba TesteCarregaTransacoes
+
 """
 
 # testes
