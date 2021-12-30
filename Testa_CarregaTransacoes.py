@@ -15,16 +15,22 @@ cartTeste = None
 
 regs = [
         
-    # deposita BRL
+    # 0 deposita BRL
     {'origem': 'a1', 
      'idop': 1577145444.0, 
      'UTC_Time': pd.Timestamp('2019-12-23 20:57:24+0000', tz='UTC'), 
      'Operation_name': 'DEPOSIT', 
      'Remark': '', 
      'Operation_type': 'deposit', 
-     'Coin': 'BRL', 'Change': 1000.0},
+     'Coin': 'BRL', 'Change': 1000.0,
+     
+     
+      'carteira':   {'BRL': {'qt': 1000.0, 'totalR$': 1000.0}},
+      'mesames':   {'201912': {'opRS': 1000.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+     
+     },
 
-    # compra BTC
+    # 1 compra BTC
     {'origem': 'a1', 
      'idop': 1577145504.0, 
      'UTC_Time': pd.Timestamp('2019-12-23 20:58:24+0000', tz='UTC'), 
@@ -39,10 +45,15 @@ regs = [
      'Operation_name': 'BUY', 
      'Remark': '', 
      'Operation_type': 'buy', 
-     'Coin': 'BRL', 'Change': -900.0},
+     'Coin': 'BRL', 'Change': -900.0,
     
+      'carteira':   {'BRL': {'qt': 100.0, 'totalR$': 100.0},
+                     'BTC': {'qt':   0.1, 'totalR$': 900.0},
+                     },
+      'mesames':   {'201912': {'opRS': 1900.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+      },
     
-    # troca BTC por ETH
+    # 3 troca BTC por ETH
     {'origem': 'a1', 
      'idop': 1577146173.0, 
      'UTC_Time': pd.Timestamp('2019-12-23 21:09:33+0000', tz='UTC'), 
@@ -65,10 +76,16 @@ regs = [
      'Operation_name': 'BUY', 
      'Remark': '', 
      'Operation_type': 'fee', 
-     'Coin': 'ETH', 'Change': -0.1},     
+     'Coin': 'ETH', 'Change': -0.1,     
     
+      'carteira':   {'BRL': {'qt': 100.00, 'totalR$': 100.0},
+                     'BTC': {'qt':   0.05, 'totalR$': 450.0},
+                     'ETH': {'qt':   1.00, 'totalR$': 450.0},
+                     },
+      'mesames':   {'201912': {'opRS': 2350.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
+      },
     
-    # vende ETH com lucro
+    # 6 vende ETH com lucro
     {'origem': 'a1', 
      'idop': 1577195504.0, 
      'UTC_Time': pd.Timestamp('2019-12-24 20:58:24+0000', tz='UTC'), 
@@ -83,9 +100,17 @@ regs = [
      'Operation_name': 'BUY', 
      'Remark': '', 
      'Operation_type': 'buy', 
-     'Coin': 'ETH', 'Change': -0.5},     
+     'Coin': 'ETH', 'Change': -0.5,
      
-    # vende BTC com lucro
+     
+      'carteira':   {'BRL': {'qt': 1100.00, 'totalR$': 1100.0},
+                     'BTC': {'qt':    0.05, 'totalR$': 450.0},
+                     'ETH': {'qt':    0.50, 'totalR$': 225.0},
+                     },
+      'mesames':   {'201912': {'opRS': 3350.0, 'vendaRS': 1000.0, 'lucroRS': 775.0}}     
+     },     
+     
+    # 8 vende BTC com lucro
     {'origem': 'a1', 
      'idop': 1577199504.0, 
      'UTC_Time': pd.Timestamp('2019-12-25 20:58:24+0000', tz='UTC'), 
@@ -108,48 +133,88 @@ regs = [
      'Operation_name': 'SELL', 
      'Remark': '', 
      'Operation_type': 'fee', 
-     'Coin': 'BTC', 'Change': -0.0001},         
+     'Coin': 'BTC', 'Change': -0.0001,
+     
+     
+      'carteira':   {'BRL': {'qt': 1500.00, 'totalR$': 1500.0},
+                     'BTC': {'qt':    0.04, 'totalR$': 360.0},
+                     'ETH': {'qt':    0.50, 'totalR$': 225.0},
+                     },
+      'mesames':   {'201912': {'opRS': 3750.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}       
+     
+     },         
 
-    # retira BRL     
+    # 11 retira BRL     
     {'origem': 'a1', 
      'idop': 1577200000.0, 
      'UTC_Time': pd.Timestamp('2019-12-25 21:58:24+0000', tz='UTC'), 
      'Operation_name': 'WITHDRAW', 
      'Remark': '', 
      'Operation_type': 'withdraw', 
-     'Coin': 'BRL', 'Change': -900.0},        
+     'Coin': 'BRL', 'Change': -900.0,
+     
+     
+      'carteira':   {'BRL': {'qt':  600.00, 'totalR$': 600.0},
+                     'BTC': {'qt':    0.04, 'totalR$': 360.0},
+                     'ETH': {'qt':    0.50, 'totalR$': 225.0},
+                     },
+      'mesames':   {'201912': {'opRS': 4650.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}       
+          
+     },        
 
-    # retira BTC
+    # 12 retira BTC
     {'origem': 'a1', 
      'idop': 1577203000.0, 
      'UTC_Time': pd.Timestamp('2019-12-25 22:58:24+0000', tz='UTC'), 
      'Operation_name': 'WITHDRAW', 
      'Remark': '', 
      'Operation_type': 'withdraw', 
-     'Coin': 'BTC', 'Change': -0.015},        
+     'Coin': 'BTC', 'Change': -0.015,
+     
+     'carteira':   {'BRL': {'qt':  600.00, 'totalR$': 600.0},
+                     'BTC': {'qt':    0.025, 'totalR$': 225.0},
+                     'ETH': {'qt':    0.50, 'totalR$': 225.0},
+                     },
+      'mesames':   {'201912': {'opRS': 4785.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}       
+     },        
 
      
-    # deposita ETH
+    # 13 deposita ETH
     {'origem': 'a1', 
      'idop': 1577206000.0, 
      'UTC_Time': pd.Timestamp('2019-12-25 23:58:24+0000', tz='UTC'), 
      'Operation_name': 'DEPOSIT', 
      'Remark': 'ValRS=20.0', 
      'Operation_type': 'deposit', 
-     'Coin': 'ETH', 'Change': 0.01},      
+     'Coin': 'ETH', 'Change': 0.01,
+     
+     'carteira':   {'BRL': {'qt':  600.00, 'totalR$': 600.0},
+                     'BTC': {'qt':    0.025, 'totalR$': 225.0},
+                     'ETH': {'qt':    0.51, 'totalR$': 245.0},
+                     },
+      'mesames':   {'201912': {'opRS': 4805.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}       
+     },      
      
      
-    # recebe staking ETH
+    # 14 recebe staking ETH
     {'origem': 'a1', 
      'idop': 1577208000.0, 
      'UTC_Time': pd.Timestamp('2019-12-26 01:58:24+0000', tz='UTC'), 
      'Operation_name': 'Staking Rewards', 
      'Remark': '', 
      'Operation_type': 'deposit', 
-     'Coin': 'ETH', 'Change': 0.0001},      
+     'Coin': 'ETH', 'Change': 0.0001,
+     
+     'carteira':   {'BRL': {'qt':  600.00, 'totalR$': 600.0},
+                     'BTC': {'qt':    0.025, 'totalR$': 225.0},
+                     'ETH': {'qt':    0.5101, 'totalR$': 245.0},
+                     },
+      'mesames':   {'201912': {'opRS': 4805.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}       
+     
+     },      
      
      
-    # vende ETH com prejuizo
+    # 15 vende ETH com prejuizo
     {'origem': 'a1', 
      'idop': 1577211000.0, 
      'UTC_Time': pd.Timestamp('2019-12-26 02:58:24+0000', tz='UTC'), 
@@ -164,106 +229,50 @@ regs = [
      'Operation_name': 'SELL', 
      'Remark': '', 
      'Operation_type': 'sell', 
-     'Coin': 'ETH', 'Change': -0.3},      
+     'Coin': 'ETH', 'Change': -0.3,
+     
+     'carteira':   {'BRL': {'qt':  700.00, 'totalR$': 700.0},
+                     'BTC': {'qt':    0.025, 'totalR$': 225.0},
+                     'ETH': {'qt':    0.2101, 'totalR$': 100.91060576357},
+                     },
+      'mesames':   {'201912': {'opRS': 4905.0, 'vendaRS': 1500.0, 'lucroRS': 1085.0}}       
+     
+     },      
      
     ]
 
-
-testes = [
-        # teste 0
-        [0,1,
-         {'BRL': {'qt': 1000.0, 'totalR$': 1000.0}},
-         {'201912': {'opRS': 1000.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
-         ],
+log = False
+# ----------------------------------------------
+def mesmodic(dic1, dic2):
+    if dic1.keys() != dic2.keys():
+        if log: print(dic1.keys(), dic2.keys())
+        return False
+    
+    for k in dic1.keys():
+        if round(dic1[k],10) != round(dic2[k],10):
+            if log: print(k,round(dic1[k],10), round(dic2[k],10))
+            return False
         
+    return True
+
+# ----------------------------------------------
+def mesmodicdic(dic1, dic2):
+    if dic1.keys() != dic2.keys():
+        if log: print(dic1.keys(), dic2.keys())
+        return False
+    
+    for k in dic1.keys():
+        if not mesmodic(dic1[k], dic2[k]):
+            return False
         
-        # teste 1
-        [0,3,
-         {'BRL': {'qt': 100.0, 'totalR$': 100.0},
-             'BTC': {'qt': 0.1, 'totalR$': 900.0}
-             },
-         {'201912': {'opRS': 1900.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
-         ],
-        
-        # teste 2
-        [0,6,
-         {'BRL': {'qt': 100.0, 'totalR$': 100.0},
-             'BTC': {'qt': 0.05, 'totalR$': 450.0},
-             'ETH': {'qt': 1.0, 'totalR$': 450.0}
-             },
-         {'201912': {'opRS': 2350.0, 'vendaRS': 0.0, 'lucroRS': 0.0}}
-         ],        
-        
-        # teste 3
-        [0,8,
-         {'BRL': {'qt': 1100.0, 'totalR$': 1100.0},
-             'BTC': {'qt': 0.05, 'totalR$': 450.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 3350.0, 'vendaRS': 1000.0, 'lucroRS': 775.0}}
-         ],   
+    return True
 
-
-        # teste 4
-         [0,11,
-         {'BRL': {'qt': 1500.0, 'totalR$': 1500.0},
-             'BTC': {'qt': 0.04, 'totalR$': 360.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 2665.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-
-
-        # teste 5
-         [0,12,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.04, 'totalR$': 360.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 3565.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-        
-        # teste 6
-         [0,13,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.5, 'totalR$': 225.0}
-             },
-         {'201912': {'opRS': 3700.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-         
-        # teste 7
-         [0,14,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.51, 'totalR$': 245.0}
-             },
-         {'201912': {'opRS': 3720.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-
-        # teste 8
-         [0,15,
-         {'BRL': {'qt': 600.0, 'totalR$': 600.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.5101, 'totalR$': 245.0}
-             },
-         {'201912': {'opRS': 3720.0, 'vendaRS': 1400.0, 'lucroRS': 1085.0}}
-         ],  
-
-        # teste 9
-         [0,17,
-         {'BRL': {'qt': 700.0, 'totalR$': 700.0},
-             'BTC': {'qt': 0.025, 'totalR$': 225.0},
-             'ETH': {'qt': 0.2101, 'totalR$': 100.91060576357577}
-             },
-         {'201912': {'opRS': 3864.089394236424, 'vendaRS': 1500.0, 'lucroRS': 1085.0}}
-         ],  
-
-
-        ]
-
-def teste(n, regs, cartf, mmf):
+# ----------------------------------------------
+def teste(n, regs):
     global cartTeste
+    
+    cartf = regs[-1]['carteira']
+    mmf = regs[-1]['mesames']
     
     ok = True
     
@@ -271,13 +280,13 @@ def teste(n, regs, cartf, mmf):
     CarregaTransacoes.mesames = {} 
            
     rett, mesames = CarregaTransacoes.carregaTransacoes(cartTeste, regs)
-    if  cartTeste.moedas != cartf:
+    if  not mesmodicdic(cartTeste.moedas, cartf):
         ok = False
         print("  ERRO %d.0"%n)
         print("esperado", cartf)
         print("obtido  ", cartTeste.moedas)
         
-    if CarregaTransacoes.mesames != mmf:
+    if not mesmodicdic(CarregaTransacoes.mesames, mmf):
         ok = False
         print("  ERRO %d.1"%n)
         print("esperado", mmf)
@@ -295,8 +304,9 @@ def teste(n, regs, cartf, mmf):
 if __name__ == "__main__":
     ok = True
     
-    for i,t in enumerate(testes):
-        ok = ok and teste(i, regs[t[0]:t[1]], t[2], t[3])
+    for i,r in enumerate(regs):
+        if 'carteira' in r:
+            ok = ok and teste(i, regs[:i+1])
     
     
     print("Final:", "OK" if ok else "NOK")

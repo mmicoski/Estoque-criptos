@@ -139,7 +139,7 @@ class CarregaTransacoes_PAT:
                         
                     else:
                         # sem cotacao: usa valor de compra da moeda entregue
-                        valorRSvenda += retr[2]
+                        valorRSvenda += abs(retr[2])
                         
                 # ------------------------------
                 

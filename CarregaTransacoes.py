@@ -94,25 +94,31 @@ def  carrega_grupo(carteira, grupoop):
         
         if len(moeda_retira) >= 1 and len(moeda_deposita) == 1:
             # dá uma ou mais moedas para adquirir uma moeda
-            valorRS = 0.0
+            # --- LADO DA VENDA (MOEDAS ENTREGUES) -----------
+            valorRSvenda = 0.0
+            valorRScusto = 0.0
+
             for mr in moeda_retira:
                 retr = carteira.retira(mr[0], abs(mr[1]))
                 if retr[0]!= "OK":
                     ret = ["NOK", "erro em buy.sell.retirada: %s"%str(retr)]
                 
-                valorRS = retr[2]
-                valsop['BRLcusto'] += valorRS
-                valsmes['opRS'] += abs(valorRS)
+                valorRSvenda += abs(retr[2])
+                valorRScusto += abs(retr[2])
+            # ------------------
             
+            # ------ LADO DA COMPRA (MOEDA RECEBIDA) ---------------
             if moeda_deposita[0][0] == 'BRL':
                 # venda por R$
-                valorRS = moeda_deposita[0][1]
-                retd = carteira.deposita(moeda_deposita[0][0], moeda_deposita[0][1], valorRS)
-                valsop['BRLfatura'] +=  abs(valorRS)
+                valorRSvenda = moeda_deposita[0][1]
+                valsop['BRLfatura'] +=  abs(valorRSvenda)
+
                 
-            else:
-                # permuta
-                retd = carteira.deposita(moeda_deposita[0][0], moeda_deposita[0][1], valorRS)
+            valsop['BRLcusto'] += valorRScusto
+            valsmes['opRS'] += abs(valorRSvenda)
+                
+            retd = carteira.deposita(moeda_deposita[0][0], moeda_deposita[0][1], valorRSvenda)
+
 
             if valsop['BRLfatura'] > 0:
                 # se recebeu BRL, eh venda
